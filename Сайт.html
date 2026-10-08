@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>РНК-контроль</title>
+	<link rel="icon" type="image/png" href="Круг.png">
+
+    <style>
+        /* Сбрасываем стандартные отступы и задаём общую модель размеров. */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Основной вид страницы. */
+        body {
+            padding: 30px 25px 30px 30px;
+            background: #ffffff;
+            color: #000;
+            font-family: system-ui, sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.025em;
+        }
+		body::before {
+			position: fixed;
+			inset: -12px;
+			z-index: -1;
+			background: url("Фон.jpg") center / cover no-repeat;
+			content: "";
+			filter: blur(8px);
+		}
+        /* Заголовок первого уровня. */
+        h1 {
+            margin-top: 10px;
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 40px;
+        }
+
+        /* Заголовок второго уровня. */
+        h2 {
+            margin-top: 15px;
+            margin-bottom: 40px;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        /* Обычные абзацы. */
+        p {
+            margin-top: 20px;
+            font-weight: 300;
+        }
+
+        /* Отступ перед последним абзацем. */
+        .lastp {
+            margin-top: 40px;
+        }
+
+        /* Общий вид полупрозрачных блоков. */
+        .panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            min-height: 0;
+            padding: 20px;
+            border-radius: 16px;
+            background: rgb(255 255 255 / 70%);
+            color: #000;
+        }
+
+        /* Ставит картинку и надпись друг под другом. */
+        .block-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Панель с микроскопом ограничена по ширине. */
+        .logo-panel {
+            width: min(100%, 320px);
+        }
+
+        /* Картинка сохраняет пропорции и занимает ширину панели. */
+        .panel-logo {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* Стиль надписи под картинкой. */
+        .panel-title {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 16px;
+			font-size: clamp(1rem, 3vw, 1.75rem);
+			font-weight: 700;
+			text-align: center;
+		}
+		.social-links {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			gap: 10px;
+		}
+		.social-link {
+			display: block;
+			width: fit-content;
+			padding: 10px 16px;
+			border: 1px solid rgb(255 255 255 / 35%);
+			border-radius: 10px;
+			background: rgb(255 255 255 / 12%);
+			color: #fff;
+			font-size: 1rem;
+			text-decoration: none;
+		}
+		/* Каждая ссылка выглядит как прямоугольная кнопка по размеру текста. */
+		.social-link {
+			display: block;
+			width: fit-content;
+			padding: 10px 16px;
+			border: 1px solid rgb(255 255 255 / 35%);
+			border-radius: 10px;
+			background: rgb(255 255 255 / 12%);
+			color: #fff;
+			font-size: 1rem;
+			text-decoration: none;
+		}
+		.social-link--telegram {
+			background: #229ED9;
+		}
+		.social-link--instagram {
+			background: linear-gradient(
+				45deg,
+				#feda75,
+				#fa7e1e,
+				#d62976,
+				#962fbf,
+				#4f5bd5
+			);
+		}
+		.social-link:hover,
+		.social-link:focus-visible {
+			filter: brightness(0.9);
+		}
+		.founder-panel {
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 16px;
+			max-width: 100%;
+			font-size: 1rem;
+		}
+
+		/* Фото слева, имя и должность справа. */
+		.founder-profile {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 14px;
+		}
+
+		.founder-photo {
+			display: block;
+			width: 88px;
+			height: 88px;
+			border-radius: 14px;
+			object-fit: cover;
+		}
+
+		.founder-name {
+			font-size: 1.15rem;
+			font-weight: 700;
+		}
+
+		/* Контактные кнопки в строку, с переносом при нехватке места. */
+		.founder-links {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 10px;
+		}
+
+		/* Цвета кнопок основателя. */
+		.social-link--telegram {
+			background: #229ED9;
+		}
+
+		.social-link--vk {
+			background: #0077FF;
+		}
+
+		.social-link--email {
+			background: #0141FB;
+		}
+        /* Цвета страницы в тёмной системной теме. */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1C1C1E;
+                color: #f1f1f1;
+            }
+
+            p {
+                color: #f1f1f1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Сначала блок с микроскопом, затем блок с надписью. -->
+    <div class="block-row">
+        <div class="panel logo-panel">
+            <img
+                class="panel-logo"
+                src="Горизонт.png"
+                alt="Микроскоп"
+            >
+        </div>
+
+        <div class="panel panel-title">
+            <span>Мы в социальных сетях</span>
+			    <div class="social-links">
+					<a class="social-link social-link--telegram"
+					   href="https://t.me/rna_control"
+					   target="_blank"
+					   rel="noopener noreferrer">Телеграм</a>
+
+					<a class="social-link social-link--instagram"
+					   href="https://instagram.com/rna_control"
+					   target="_blank"
+					   rel="noopener noreferrer">Инстаграм</a>
+				</div>
+		</div>
+		<div class="panel founder-panel">
+			<div class="founder-profile">
+				<img class="founder-photo" src="Клим.jpg" alt="Клим Караваев">
+				<span class="founder-name">Клим Караваев, CEO</span>
+			</div>
+
+			<div class="founder-links">
+				<a class="social-link social-link--telegram"
+				   href="https://t.me/lmnnpshnchn"
+				   target="_blank"
+				   rel="noopener noreferrer">Телеграм</a>
+
+				<a class="social-link social-link--vk"
+				   href="https://vk.ru/limonno_pshenichniy_kazah"
+				   target="_blank"
+				   rel="noopener noreferrer">ВК</a>
+
+				<a class="social-link social-link--email"
+				   href="mailto:karavaev.klim.a@yandex.ru">karavaev.klim.a@yandex.ru</a>
+			</div>
+		</div>
+		<div class="panel founder-panel">
+			<div class="founder-profile">
+				<span class="founder-name">Юлия Несговорова, СММ</span>
+				<img class="founder-photo" src="Юля.png" alt="Юлия Несговорова">
+			</div>
+
+			<div class="founder-links">
+				<a class="social-link social-link--telegram"
+				   href="https://t.me/eitvited"
+				   target="_blank"
+				   rel="noopener noreferrer">Телеграм</a>
+
+				<a class="social-link social-link--vk"
+				   href="https://vk.ru/eitvited"
+				   target="_blank"
+				   rel="noopener noreferrer">ВК</a>
+
+				<a class="social-link social-link--email"
+				   href="mailto:y.nesgovorova@g.nsu.ru">y.nesgovorova@g.nsu.ru</a>
+			</div>
+		</div>
+    </div>
+</body>
+</html>
